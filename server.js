@@ -33,7 +33,7 @@ function buildServer() {
       limit: z.number().optional().default(10),
     },
     async ({ subreddit, sort, limit }) => {
-      const url = `https://old.reddit.com/r/${subreddit}/${sort}.json?limit=${limit}`;
+      const url = `https://www.reddit.com/r/${subreddit}/${sort}.json?limit=${limit}`;
       const data = await fetchRedditJson(url);
       const posts = data.data.children.map((c) => ({
         title: c.data.title,
@@ -56,8 +56,8 @@ function buildServer() {
     },
     async ({ query, subreddit, limit }) => {
       const base = subreddit
-        ? `https://old.reddit.com/r/${subreddit}/search.json`
-        : `https://old.reddit.com/search.json`;
+        ? `https://www.reddit.com/r/${subreddit}/search.json`
+        : `https://www.reddit.com/search.json`;
       const url = `${base}?q=${encodeURIComponent(query)}&limit=${limit}&restrict_sr=${subreddit ? "on" : "off"}`;
       const data = await fetchRedditJson(url);
       const posts = data.data.children.map((c) => ({
@@ -85,4 +85,4 @@ app.post("/mcp", async (req, res) => {
 });
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`MCP server listening on port ${port}`));
+app
