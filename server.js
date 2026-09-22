@@ -6,6 +6,21 @@ import { z } from "zod";
 const app = express();
 app.use(express.json());
 
+const HEADERS = {
+  "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "Accept": "application/json",
+};
+
+async function fetchRedditJson(url) {
+  const res = await fetch(url, { headers: HEADERS });
+  const text = await res.text();
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    throw new Error(`Reddit did not return JSON (status ${res.status}). First 200 chars: ${text.slice(0, 200)}`);
+  }
+}
+
 function buildServer() {
   const server = new McpServer({ name: "reddit-public", version: "1.0.0" });
 
@@ -18,9 +33,8 @@ function buildServer() {
       limit: z.number().optional().default(10),
     },
     async ({ subreddit, sort, limit }) => {
-      const url = `https://www.reddit.com/r/${subreddit}/${sort}.json?limit=${limit}`;
-      const res = await fetch(url, { headers: { "User-Agent": "claude-reddit-reader/1.0" } });
-      const data = await res.json();
+      const url = `https://old.reddit.com/r/${subreddit}/${sort}.json?limit=${limit}`;
+      const data = await fetchRedditJson(url);
       const posts = data.data.children.map((c) => ({
         title: c.data.title,
         score: c.data.score,
@@ -42,11 +56,10 @@ function buildServer() {
     },
     async ({ query, subreddit, limit }) => {
       const base = subreddit
-        ? `https://www.reddit.com/r/${subreddit}/search.json`
-        : `https://www.reddit.com/search.json`;
+        ? `https://old.reddit.com/r/${subreddit}/search.json`
+        : `https://old.reddit.com/search.json`;
       const url = `${base}?q=${encodeURIComponent(query)}&limit=${limit}&restrict_sr=${subreddit ? "on" : "off"}`;
-      const res = await fetch(url, { headers: { "User-Agent": "claude-reddit-reader/1.0" } });
-      const data = await res.json();
+      const data = await fetchRedditJson(url);
       const posts = data.data.children.map((c) => ({
         title: c.data.title,
         subreddit: c.data.subreddit,
