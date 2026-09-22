@@ -1,50 +1,14 @@
 {
-  "name": "@reddit/mcp-server",
+  "name": "reddit-mcp-public",
   "version": "1.0.0",
-  "description": "Model Context Protocol server for Reddit API",
-  "main": "dist/index.js",
   "type": "module",
+  "main": "server.js",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsx watch src/index.ts",
-    "start": "node dist/index.js",
-    "test": "vitest",
-    "lint": "eslint src/**/*.ts",
-    "format": "prettier --write src/**/*.ts"
+    "start": "node server.js"
   },
-  "keywords": [
-    "mcp",
-    "model-context-protocol",
-    "reddit",
-    "api",
-    "typescript"
-  ],
-  "author": "Your Name",
-  "license": "MIT",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.17.4",
-    "dotenv": "^16.3.1",
-    "zod": "^3.22.4"
-  },
-  "devDependencies": {
-    "@types/node": "^20.10.0",
-    "@typescript-eslint/eslint-plugin": "^6.13.0",
-    "@typescript-eslint/parser": "^6.13.0",
-    "eslint": "^8.54.0",
-    "prettier": "^3.1.0",
-    "tsx": "^4.6.0",
-    "typescript": "^5.3.0",
-    "vitest": "^1.0.0"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/yourusername/reddit-mcp-server.git"
-  },
-  "bugs": {
-    "url": "https://github.com/yourusername/reddit-mcp-server/issues"
-  },
-  "homepage": "https://github.com/yourusername/reddit-mcp-server#readme"
+    "express": "^4.19.2",
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "zod": "^3.23.8"
+  }
 }
